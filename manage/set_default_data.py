@@ -1,11 +1,8 @@
 from mysql.connector import connect, Error
 from settings import connect_data as settings
 
-class ParsSaver:
-    def __init__(self, data):
-        self.pars_data = data
-
-    # настройки бд
+class ManageDB:
+     # настройки бд
     def connect_data(self):
         return settings()
 
@@ -59,6 +56,10 @@ class ParsSaver:
             return ('[+] data set successful')
         except Error as e:
             return (e)
+
+class ParsSaver(ManageDB):
+    def __init__(self, data):
+        self.pars_data = data
 
     # разносим данные к таблице класов
     def set_class_info(self, class_info):

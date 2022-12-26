@@ -160,22 +160,6 @@ class Create_db:
                     ('лекарь',),
                 ]
 
-                sql_sebservises = "INSERT INTO subservises (servis_id, name, price) VALUES (%s, %s, %s)"
-                val_sebservises = [
-                    (1, 'BMW', 30000.00),
-                    (1, 'Mersedes', 35999.99),
-                    (1, 'Pagani', 49999.99),
-                    (2, 'Acura', 20000.00),
-                    (2, 'Volkswagen', 23000.00),
-                    (2, 'Volvo', 19700.85),
-                    (2, 'Jeep', 30000.00),
-                    (2, 'Dodge', 19999.99),
-                    (3, 'Daewoo', 3000.00),
-                    (3, 'Citroen', 8000.00),
-                    (3, 'Renault', 4500.00),
-                    (3, 'Chery', 7000.00),
-
-                ]
                 with connection.cursor() as cursor:
                     cursor.executemany(sql_weapon, val_weapon)
                     cursor.executemany(sql_armor, val_armor)
