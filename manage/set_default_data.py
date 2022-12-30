@@ -1,5 +1,5 @@
 from mysql.connector import connect, Error
-from settings import connect_data as settings
+from manage.settings import connect_data as settings
 
 class ManageDB:
      # настройки бд

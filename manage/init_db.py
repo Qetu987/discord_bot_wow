@@ -83,6 +83,7 @@ class Create_db:
                             id INT AUTO_INCREMENT PRIMARY KEY,
                             class_id INT,
                             name VARCHAR(100),
+                            user VARCHAR(100),
                             lvl INT,
                             date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             FOREIGN KEY (class_id) REFERENCES class(id) ON DELETE CASCADE

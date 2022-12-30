@@ -23,7 +23,9 @@ def get_page(url):
 def get_pers_data(url):
     pers_data = dict()
     soup = get_page(url)
-    pers_data['name'] = soup.find('div', class_='font-semp-xxxLarge-white').text
+    pers_data['name'] = soup.find('div', class_='font-semp-xxxLarge-white')
+
+    pers_data['name'] = pers_data['name'].text
 
     pers_data_soup = soup.findAll('div', class_='Grid-full')
     pers_data['desc'] = pers_data_soup[1].findAll('div', class_='gutter-vertical')[1].text
