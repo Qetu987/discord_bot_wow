@@ -1,8 +1,8 @@
 from mysql.connector import connect, Error
-from manage.settings import connect_data as settings
+from db_manager.settings import connect_data as settings
 
 class ManageDB:
-     # настройки бд
+    # настройки бд
     def connect_data(self):
         return settings()
 
@@ -57,29 +57,34 @@ class ManageDB:
         except Error as e:
             return (e)
 
-class ParsSaver(ManageDB):
-    def __init__(self, data):
-        self.pars_data = data
 
-    # разносим данные к таблице класов
-    def set_class_info(self, class_info):
-        querry = f"INSERT INTO class (name, descript) VALUES ('{class_info['name'].lower()}', '{class_info['desc']}')"
-        result = self.data_setter(querry)
-        print(result, 'class')
+class PlayerManager(ManageDB):
+    def __init__(self, user_id):
+        self.user_id = user_id
+    
+    def check_user(self, name, table):
+        return self.get_one_data(f'SELECT id FROM {table} WHERE name = "{name}"')
 
-    def set_class_subtables(self, table_junction, subtable, data, class_id ):
-        for i in data:
-            subtable_id = self.get_one_data(f'SELECT * FROM {subtable} WHERE name = "{i}"')[0]
-            querry = f"INSERT INTO {table_junction} (class_id, {subtable}_id) VALUES ({class_id}, {subtable_id})"
-            result = self.data_setter(querry)
-            print(result, subtable)
+    def user_register(self, name, lvl):
+        table = 'pers'
+        if not self.check_user(name, table):
+            querry = f"INSERT INTO {table} (name, user, lvl) VALUES ('{name}', '{self.user_id}', '{lvl}')"
+            ans = self.data_setter(querry)
+            pers_id = self.get_one_data(f'SELECT id FROM {table} WHERE user = "{self.user_id}" and name = "{name}"')
+            return {'ans': ans, 'id':pers_id[0]}
+        else:
+            return None
 
-    def set_class_data(self):
-        for class_data in self.pars_data:
-            self.set_class_info(class_data)
-            class_id = self.get_one_data(f'SELECT * FROM class WHERE name = "{class_data["name"].lower()}"')[0]
-            self.set_class_subtables('armor_class_junction', 'armor', class_data['Броня'], class_id)
-            self.set_class_subtables('type_class_junction', 'type', class_data['Тип'], class_id)
-            self.set_class_subtables('weapon_class_junction', 'weapon', class_data['Оружие'], class_id)
-        
-        print('[+] all tables set successful')
+    def user_class_update(self, pers_class, pers_id):
+        table = 'pers'
+        pers_data = self.get_one_data(f'SELECT * FROM {table} WHERE id = "{pers_id}" and user = "{self.user_id}"')
+        if pers_data:
+            if self.get_one_data(f'SELECT class_id FROM {table} WHERE id = "{pers_id}"')[0] == None:
+                class_id = self.check_user(pers_class, 'class')[0]
+                querry = f'UPDATE pers SET class_id = "{class_id}" WHERE id = "{pers_id}";'
+                ans = self.data_setter(querry)
+                return {'ans': ans}
+            else:
+                return None
+        else:
+            return None

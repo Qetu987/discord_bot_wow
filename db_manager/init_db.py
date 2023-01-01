@@ -1,5 +1,5 @@
 from mysql.connector import connect, Error
-from settings import connect_data
+from bot.db_manager.settings import connect_data
 
 
 class Create_db:

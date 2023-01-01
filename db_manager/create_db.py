@@ -1,9 +1,9 @@
-from init_db import Create_db
-from set_default_data import ParsSaver
-from pars import get_info_by_classes
+from bot.db_manager.init_db import Create_db
+from bot.db_manager.set_default_data import ParsSaver
+from bot.db_manager.pars import get_info_by_classes
 
 
-if __name__ == "__main__":
+def create():
     # создаем базу, таблицы и базовые данные
     cr = Create_db()
     cr.create_db()
