@@ -81,7 +81,20 @@ class PlayerManager(ManageDB):
         if pers_data:
             if self.get_one_data(f'SELECT class_id FROM {table} WHERE id = "{pers_id}"')[0] == None:
                 class_id = self.check_user(pers_class, 'class')[0]
-                querry = f'UPDATE pers SET class_id = "{class_id}" WHERE id = "{pers_id}";'
+                querry = f'UPDATE {table} SET class_id = "{class_id}" WHERE id = "{pers_id}";'
+                ans = self.data_setter(querry)
+                return {'ans': ans}
+            else:
+                return None
+        else:
+            return None
+
+    def user_thrace_update(self, pers_thrace, pers_id):
+        table = 'pers'
+        pers_data = self.get_one_data(f'SELECT * FROM {table} WHERE id = "{pers_id}" and user = "{self.user_id}"')
+        if pers_data:
+            if self.get_one_data(f'SELECT class_id FROM {table} WHERE id = "{pers_id}"')[0] == None:
+                querry = f'UPDATE {table} SET thrace = "{pers_thrace}" WHERE id = "{pers_id}";'
                 ans = self.data_setter(querry)
                 return {'ans': ans}
             else:

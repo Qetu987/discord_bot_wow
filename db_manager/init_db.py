@@ -84,6 +84,7 @@ class Create_db:
                             class_id INT,
                             name VARCHAR(100),
                             user VARCHAR(100),
+                            thrace VARCHAR(100),
                             lvl INT,
                             date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             FOREIGN KEY (class_id) REFERENCES class(id) ON DELETE CASCADE

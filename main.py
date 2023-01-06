@@ -30,8 +30,7 @@ class PlayerRegiester(discord.ui.Modal):
             embed.add_field(name="lvl", value=self.children[1].value)
             await interaction.response.send_message(
                 embeds=[embed], 
-                view=ClassDropdown(pers_id=create_ans['id'])
-                )
+                view= ThraceDropdown(pers_id=create_ans['id']))
         else:
             await interaction.response.send_message('[-] allready exist')
 
@@ -85,6 +84,38 @@ class ClassDropdown(discord.ui.View):
             await interaction.response.send_message(f"Awesome! I like {select.values[0]} too!")
         else:
             await interaction.response.send_message('[-] class allready exist')
+
+class ThraceDropdown(discord.ui.View):
+    def __init__(self, pers_id, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.pers_id = pers_id
+
+    @discord.ui.select(
+        placeholder = "Choose a thrace!",
+        min_values = 1,
+        max_values = 1,
+        options = [
+            discord.SelectOption(
+                label='альянс',
+            ),
+            discord.SelectOption(
+                label='орда',
+            ),
+        ]
+    )
+    async def select_callback(self, select, interaction):
+        pers = PlayerManager(user_id=interaction.user.id)
+        ans = pers.user_thrace_update(pers_thrace=select.values[0], pers_id=self.pers_id)
+        print(ans)
+        
+        if ans:
+            await interaction.response.send_message(
+                f"За { 'орду' if select.values[0] == 'орда' else select.values[0]}!\
+                \n\n Please choose the class of your pers",
+                view = ClassDropdown(pers_id=self.pers_id)
+            )
+        else:
+            await interaction.response.send_message('[-] thrace allready exist')
 
 @bot.event
 async def on_ready():
